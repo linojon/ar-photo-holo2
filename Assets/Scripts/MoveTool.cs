@@ -9,12 +9,14 @@ public class MoveTool : MonoBehaviour, IInputClickHandler {
 
     private SpatialMappingManager spatialMapping;
     private Vector3 localOffset;
+    private Vector3 defaultScale;
 
     private float upNormalThreshold = 0.9f;
 
     void Start() {
         spatialMapping = SpatialMappingManager.Instance;
         localOffset = transform.position - picture.position;
+        defaultScale = transform.localScale;
     }
 
     void Update() {
@@ -49,6 +51,7 @@ public class MoveTool : MonoBehaviour, IInputClickHandler {
             Debug.Log("MoveTool: drawing meshes");
 
             spatialMapping.DrawVisualMeshes = true;
+            transform.localScale = defaultScale * 2.5f;
         }
     }
 
@@ -58,6 +61,7 @@ public class MoveTool : MonoBehaviour, IInputClickHandler {
             Debug.Log("MoveTool: not drawing meshes");
 
             spatialMapping.DrawVisualMeshes = false;
+            transform.localScale = defaultScale;
         }
     }
 
