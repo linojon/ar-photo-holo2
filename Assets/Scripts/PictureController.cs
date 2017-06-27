@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PictureController : MonoBehaviour {
     public GameObject toolbar;
+    public GameObject imageMenu;
+    public GameObject frameMenu;
     public Transform frameSpawnPoint;
 
     private Renderer imageRenderer;
@@ -22,8 +24,100 @@ public class PictureController : MonoBehaviour {
             Debug.Log("PictureController does not have child Image object");
         }
         // find toolbar?
+        BeginEdit();
     }
 
+    public GameObject GetToolbar() {
+        if (toolbar == null) {
+            Transform tb = transform.Find("Toolbar");
+            toolbar = tb.gameObject;
+        }
+        return toolbar;
+    }
+
+    public void Execute(PictureCommand command) {
+        switch (command) {
+            case PictureCommand.ADD:
+                break;
+
+            case PictureCommand.EDIT:
+                BeginEdit();
+                break;
+
+            case PictureCommand.DONE:
+                DoneEdit();
+                break;
+
+            case PictureCommand.CANCEL:
+                CancelEdit();
+                break;
+
+            //case PictureCommand.MOVE:
+            //    break;
+
+            case PictureCommand.SCALE:
+                break;
+
+            case PictureCommand.DELETE:
+                DeletePicture();
+                break;
+
+            case PictureCommand.IMAGE:
+                OpenImageMenu();
+                break;
+
+            case PictureCommand.FRAME:
+                OpenFrameMenu();
+                break;
+        }
+    }
+
+    //----------
+
+    private void AddPicture() {
+        toolbar.SetActive(false);
+        GameController.instance.CreateNewPicture();
+    }
+
+    private void BeginEdit() {
+        startPosition = transform.localPosition;
+        startScale = transform.localScale;
+        startRotation = transform.localRotation;
+        startTexture = imageRenderer.material.mainTexture;
+        startFrame = Instantiate(GetCurrentFrame());
+        startFrame.SetActive(false);
+
+        toolbar.SetActive(true);
+    }
+
+    private void DoneEdit() {
+        Destroy(startFrame);
+        toolbar.SetActive(false);
+    }
+
+    private void CancelEdit() {
+        transform.localPosition = startPosition;
+        transform.localScale = startScale;
+        transform.localRotation = startRotation;
+        imageRenderer.material.mainTexture = startTexture;
+        CreateFrame(startFrame);
+
+        toolbar.SetActive(false);
+    }
+
+    private void DeletePicture() {
+        Destroy(gameObject);
+    }
+
+    private void OpenImageMenu() {
+        imageMenu.SetActive(true);
+    }
+
+    private void OpenFrameMenu() {
+        frameMenu.SetActive(true);
+    }
+
+    //-----------
     public void SetTexture(Texture texture) {
         imageRenderer.material.mainTexture = texture;
     }
@@ -46,32 +140,6 @@ public class PictureController : MonoBehaviour {
     }
 
     // SetPosition
-
-    public void BeginEdit() {
-        startPosition = transform.localPosition;
-        startScale = transform.localScale;
-        startRotation = transform.localRotation;
-        startTexture = imageRenderer.material.mainTexture;
-        startFrame = Instantiate(GetCurrentFrame());
-        startFrame.SetActive(false);
-
-        toolbar.SetActive(true);
-    }
-
-    public void DoneEdit() {
-        Destroy(startFrame);
-        toolbar.SetActive(false);
-    }
-
-    public void CancelEdit() {
-        transform.localPosition = startPosition;
-        transform.localScale = startScale;
-        transform.localRotation = startRotation;
-        imageRenderer.material.mainTexture = startTexture;
-        CreateFrame(startFrame);
-
-        toolbar.SetActive(false);
-    }
 
     private GameObject GetCurrentFrame() {
         Transform currentFrame = frameSpawnPoint.GetChild(0);

@@ -1,0 +1,1 @@
+﻿public enum PictureCommand { ADD, EDIT, DONE, CANCEL, MOVE, SCALE, DELETE, IMAGE, FRAME   }

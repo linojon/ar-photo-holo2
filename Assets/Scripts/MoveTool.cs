@@ -2,9 +2,10 @@
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 
-public class MoveTool : MonoBehaviour, IInputClickHandler {
+public class MoveTool : MonoBehaviour {
+    private PictureController picture;
+    private GameObject toolbar;
 
-    public Transform picture;
     private bool isEditing = false;
 
     private SpatialMappingManager spatialMapping;
@@ -14,8 +15,11 @@ public class MoveTool : MonoBehaviour, IInputClickHandler {
     private float upNormalThreshold = 0.9f;
 
     void Start() {
+        picture = GetComponentInParent<PictureController>();
+        toolbar = picture.GetToolbar();
+
         spatialMapping = SpatialMappingManager.Instance;
-        localOffset = transform.position - picture.position;
+        localOffset = transform.position - picture.transform.position;
         defaultScale = transform.localScale;
     }
 
@@ -30,7 +34,7 @@ public class MoveTool : MonoBehaviour, IInputClickHandler {
                 Quaternion rotation = Camera.main.transform.localRotation;
                 Vector3 surfaceNormal = hitInfo.normal;
                 if (Mathf.Abs(surfaceNormal.y) <= (1 - upNormalThreshold)) {
-                    picture.rotation = Quaternion.LookRotation(-surfaceNormal, Vector3.up);
+                    picture.transform.rotation = Quaternion.LookRotation(-surfaceNormal, Vector3.up);
                 }
             }
         }

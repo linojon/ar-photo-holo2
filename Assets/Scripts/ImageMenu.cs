@@ -1,16 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using HoloToolkit.Unity.InputModule;
-using System;
+﻿using UnityEngine;
 
-public class ImageMenu : MonoBehaviour {
-    public GameObject picture;
-    public GameObject toolbar;
-    private bool isEditing = false;
+public class ImageMenu : PictureMenu {
 
     public Texture[] ImageTextures;
-    public ClickableObject[] ImageClickableObjects;
     [SerializeField]
     private ClickableObject nextButton;
     [SerializeField]
@@ -19,58 +11,32 @@ public class ImageMenu : MonoBehaviour {
     //The items per page is calculated by the number of images shown at start.
     private int indexOffset;
 
-    private PictureController pictureController;
-
-    private void Start() {
-        pictureController = picture.GetComponent<PictureController>();
-        if (pictureController == null) {
-            Debug.Log("ImageMenu: Picture require PictureController component");
-        }
-    }
-
-    void OnEnable() {
-        Debug.Log("ImageMenu: OnEnable");
-        BeginEdit();
-    }
-
-    public void BeginEdit() {
-        SubscribeClickableObjects();
+    public override void BeginEdit() {
         UpdateImages();
-        toolbar.SetActive(false);
     }
 
-    public void DoneEdit() {
-        Debug.Log("ImageMenu: DoneEdit");
-        toolbar.SetActive(true);
-        gameObject.SetActive(false);
-        // remove listeners ImageClickableObjects ??
-    }
-
-    private void SubscribeClickableObjects() {
+    public void SubscribeClickableObjects() {
+        base.SubscribeClickableObjects();
         previousButton.OnObjectClicked.AddListener(PreviousPage);
         nextButton.OnObjectClicked.AddListener(NextPage);
-        //confirmButton.OnObjectClicked.AddListener(ConfirmImage);
-
-        for (int i = 0; i < ImageClickableObjects.Length; i++) {
-            ImageClickableObjects[i].OnClickableObjectClicked.AddListener(ObjectClicked);
-        }
     }
 
-    void ObjectClicked(GameObject clickedGameObject) {
+    public override void ObjectClicked(GameObject clickedGameObject) {
         Texture texture = clickedGameObject.GetComponent<Renderer>().material.mainTexture;
-        pictureController.SetTexture(texture);
+        picture.SetTexture(texture);
         DoneEdit(); // close ImageMenu when one pic is picked
     }
 
+
     private void UpdateImages() {
-        for (int i = 0; i < ImageClickableObjects.Length; i++) {
+        for (int i = 0; i < clickableObjects.Length; i++) {
             //Sets the texture for the images based on index
-            ImageClickableObjects[i].GetComponent<Renderer>().material.mainTexture = ImageTextures[i + indexOffset];
+            clickableObjects[i].GetComponent<Renderer>().material.mainTexture = ImageTextures[i + indexOffset];
         }
     }
 
     private void NextPage() {
-        if ((indexOffset + ImageClickableObjects.Length) < ImageTextures.Length) {
+        if ((indexOffset + clickableObjects.Length) < ImageTextures.Length) {
             indexOffset++;
         }
         UpdateImages();
