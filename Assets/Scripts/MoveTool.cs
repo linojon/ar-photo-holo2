@@ -2,25 +2,23 @@
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
 
-public class MoveTool : MonoBehaviour {
+public class MoveTool : MonoBehaviour, IInputClickHandler {
     private PictureController picture;
-    private GameObject toolbar;
 
     private bool isEditing = false;
 
     private SpatialMappingManager spatialMapping;
     private Vector3 localOffset;
-    private Vector3 defaultScale;
+    private Vector3 defaultButtonScale;
 
     private float upNormalThreshold = 0.9f;
 
     void Start() {
         picture = GetComponentInParent<PictureController>();
-        toolbar = picture.GetToolbar();
 
         spatialMapping = SpatialMappingManager.Instance;
         localOffset = transform.position - picture.transform.position;
-        defaultScale = transform.localScale;
+        defaultButtonScale = transform.localScale;
     }
 
     void Update() {
@@ -31,7 +29,6 @@ public class MoveTool : MonoBehaviour {
             RaycastHit hitInfo;
             if (Physics.Raycast(headPosition, gazeDirection, out hitInfo, 30.0f, layerMask)) {
                 picture.transform.position = hitInfo.point - localOffset; // keep tool in gaze
-                Quaternion rotation = Camera.main.transform.localRotation;
                 Vector3 surfaceNormal = hitInfo.normal;
                 if (Mathf.Abs(surfaceNormal.y) <= (1 - upNormalThreshold)) {
                     picture.transform.rotation = Quaternion.LookRotation(-surfaceNormal, Vector3.up);
@@ -55,7 +52,7 @@ public class MoveTool : MonoBehaviour {
             Debug.Log("MoveTool: drawing meshes");
 
             spatialMapping.DrawVisualMeshes = true;
-            transform.localScale = defaultScale * 2.5f;
+            transform.localScale = defaultButtonScale * 2.5f;
         }
     }
 
@@ -65,7 +62,7 @@ public class MoveTool : MonoBehaviour {
             Debug.Log("MoveTool: not drawing meshes");
 
             spatialMapping.DrawVisualMeshes = false;
-            transform.localScale = defaultScale;
+            transform.localScale = defaultButtonScale;
         }
     }
 

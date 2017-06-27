@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PictureController : MonoBehaviour {
+    public Transform framedImage;
     public GameObject toolbar;
     public GameObject imageMenu;
     public GameObject frameMenu;
-    public Transform frameSpawnPoint;
 
+    private Transform frameSpawnPoint;
     private Renderer imageRenderer;
 
     private Vector3 startPosition;
@@ -17,27 +18,18 @@ public class PictureController : MonoBehaviour {
     private GameObject startFrame;
 
     void Start() {
-        Transform image = gameObject.transform.Find("Image");
-        if (image != null) {
-            imageRenderer = image.gameObject.GetComponent<Renderer>();
-        } else {
-            Debug.Log("PictureController does not have child Image object");
-        }
-        // find toolbar?
-        BeginEdit();
-    }
+        frameSpawnPoint = framedImage.Find("FrameSpawn");
 
-    public GameObject GetToolbar() {
-        if (toolbar == null) {
-            Transform tb = transform.Find("Toolbar");
-            toolbar = tb.gameObject;
-        }
-        return toolbar;
+        Transform image = framedImage.Find("Image");
+        imageRenderer = image.gameObject.GetComponent<Renderer>();
+
+        BeginEdit();
     }
 
     public void Execute(PictureCommand command) {
         switch (command) {
             case PictureCommand.ADD:
+                AddPicture();
                 break;
 
             case PictureCommand.EDIT:
@@ -120,6 +112,7 @@ public class PictureController : MonoBehaviour {
     //-----------
     public void SetTexture(Texture texture) {
         imageRenderer.material.mainTexture = texture;
+        framedImage.transform.localScale = TextureToScale(texture);
     }
 
     public void SetFrame(GameObject frameGameObject) {
@@ -139,8 +132,6 @@ public class PictureController : MonoBehaviour {
         return newFrame;
     }
 
-    // SetPosition
-
     private GameObject GetCurrentFrame() {
         Transform currentFrame = frameSpawnPoint.GetChild(0);
         if (currentFrame != null) {
@@ -148,4 +139,16 @@ public class PictureController : MonoBehaviour {
         }
         return null;
     }
+
+
+    private Vector3 TextureToScale(Texture texture) {
+        Vector3 scale = Vector3.one;
+        if (texture.width > texture.height) {
+            scale.y = (texture.height * 1.0f) / texture.width;
+        } else {
+            scale.x = (texture.width * 1.0f) / texture.height;
+        }
+        return scale;
+    }
+
 }

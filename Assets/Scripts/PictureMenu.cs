@@ -13,8 +13,7 @@ public abstract class PictureMenu : MonoBehaviour {
     void OnEnable() {
         Debug.Log("PictureMenu: OnEnable");
         picture = GetComponentInParent<PictureController>();
-        toolbar = picture.GetToolbar();
-        toolbar.SetActive(false);
+        picture.toolbar.SetActive(false);
         BeginEdit();
     }
 
@@ -24,7 +23,7 @@ public abstract class PictureMenu : MonoBehaviour {
 
     public void DoneEdit() {
         Debug.Log("PictureMenu: DoneEdit");
-        toolbar.SetActive(true);
+        picture.toolbar.SetActive(true);
         gameObject.SetActive(false);
     }
 
