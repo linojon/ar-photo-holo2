@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 23403018455153316}
   - component: {fileID: 65000876907391560}
   - component: {fileID: 95587942413923520}
-  - component: {fileID: 114390547497185400}
   m_Layer: 0
   m_Name: RightArrowIcon
   m_TagString: Untagged
@@ -112,15 +111,3 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114390547497185400
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1459434380888928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 096a984700918224abe5e63d943168be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TriggerName: Click

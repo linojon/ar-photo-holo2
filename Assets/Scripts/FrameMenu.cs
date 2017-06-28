@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class FrameMenu : PictureMenu {
 
+    public override void InitMenu() {
+    }
     public override void BeginEdit() {
     }
 

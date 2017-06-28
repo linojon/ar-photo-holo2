@@ -11,14 +11,14 @@ public class ImageMenu : PictureMenu {
     //The items per page is calculated by the number of images shown at start.
     private int indexOffset;
 
-    public override void BeginEdit() {
-        UpdateImages();
-    }
-
-    public void SubscribeClickableObjects() {
+    public override void InitMenu() {
         base.SubscribeClickableObjects();
         previousButton.OnObjectClicked.AddListener(PreviousPage);
         nextButton.OnObjectClicked.AddListener(NextPage);
+    }
+
+    public override void BeginEdit() {
+        UpdateImages();
     }
 
     public override void ObjectClicked(GameObject clickedGameObject) {
@@ -26,8 +26,7 @@ public class ImageMenu : PictureMenu {
         picture.SetTexture(texture);
         DoneEdit(); // close ImageMenu when one pic is picked
     }
-
-
+    
     private void UpdateImages() {
         for (int i = 0; i < clickableObjects.Length; i++) {
             //Sets the texture for the images based on index

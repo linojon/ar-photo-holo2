@@ -11,14 +11,16 @@ public class ClickableObject : MonoBehaviour, IInputClickHandler {
 
     public ClickableObjectEvent OnClickableObjectClicked = new ClickableObjectEvent();
     public UnityEvent OnObjectClicked = new UnityEvent();
+    protected Animator animator;
 
     void Start () {
-        if (GetComponent<Collider>() == null) {
-            Debug.Log("ClickableObject " + gameObject.name + " does not have a collider and the click event won't be sent");
-        }
+        animator = GetComponent<Animator>();
     }
 
     public void OnInputClicked(InputClickedEventData eventData) {
+        if (animator != null) {
+            animator.SetTrigger("Click");
+        }
         OnClickableObjectClicked.Invoke(gameObject);
         OnObjectClicked.Invoke();
     }

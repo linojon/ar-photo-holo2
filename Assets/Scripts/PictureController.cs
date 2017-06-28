@@ -47,8 +47,8 @@ public class PictureController : MonoBehaviour {
             //case PictureCommand.MOVE:
             //    break;
 
-            case PictureCommand.SCALE:
-                break;
+            //case PictureCommand.SCALE:
+            //    break;
 
             case PictureCommand.DELETE:
                 DeletePicture();
@@ -78,13 +78,15 @@ public class PictureController : MonoBehaviour {
         startTexture = imageRenderer.material.mainTexture;
         startFrame = Instantiate(GetCurrentFrame());
         startFrame.SetActive(false);
-
+        //framedImage.GetComponent<Collider>().enabled = false;
         toolbar.SetActive(true);
     }
 
     private void DoneEdit() {
         Destroy(startFrame);
         toolbar.SetActive(false);
+        //framedImage.GetComponent<Collider>().enabled = true;
+
     }
 
     private void CancelEdit() {

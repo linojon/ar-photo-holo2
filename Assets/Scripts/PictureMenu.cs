@@ -8,6 +8,7 @@ public abstract class PictureMenu : MonoBehaviour {
 
     void Start() {
         SubscribeClickableObjects();
+        InitMenu();
     }
 
     void OnEnable() {
@@ -17,8 +18,8 @@ public abstract class PictureMenu : MonoBehaviour {
         BeginEdit();
     }
 
+    public abstract void InitMenu();
     public abstract void BeginEdit();
-
     public abstract void ObjectClicked(GameObject clickedGameObject);
 
     public void DoneEdit() {
